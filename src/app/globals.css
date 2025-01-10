@@ -4,10 +4,11 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #000000;
+  --foreground: #ffffff;
 }
 
 body {
+  height: 100vh;
   color: var(--foreground);
   background: var(--background);
 }

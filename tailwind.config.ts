@@ -1,10 +1,12 @@
 import type { Config } from "tailwindcss";
+const { nextui } = require("@nextui-org/react");
 
 export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -29,6 +31,20 @@ export default {
           "900": "#3d3d3d",
           "950": "#292929",
         },
+        blue: {
+          "50": "#eff3ff",
+          "100": "#dbe4fe",
+          "200": "#bfd0fe",
+          "300": "#93affd",
+          "400": "#6088fa",
+          "500": "#3b6cf6",
+          "600": "#2559eb",
+          "700": "#1d4ed8",
+          "800": "#1e44af",
+          "900": "#1e3a8a",
+          "950": "#172754",
+        },
+
         black: {
           "50": "#f6f6f6",
           "100": "#e7e7e7",
@@ -45,5 +61,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [nextui()],
 } satisfies Config;
