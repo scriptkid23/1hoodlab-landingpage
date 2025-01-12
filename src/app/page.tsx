@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { Button, NextUIProvider } from "@nextui-org/react";
 import SocialLink from "./components/SocialLink";
+import CircleAnim from "./components/CircleAnim";
+import OvalAnim from "./components/OvalAnim";
 
 export default function Home() {
   return (
@@ -82,7 +84,20 @@ export default function Home() {
             </div>
           </div>
           <div className="col-span-9">
-            <div className="bg-white-50">1</div>
+            <div className="bg-white flex  items-start justify-start h-screen">
+              {/* Wrapper cho CircleAnim và OvalAnim */}
+              <div className="relative flex items-center justify-center ml-[33%] mt-[calc(100vh/3)]">
+                {/* CircleAnim */}
+                <div className="absolute">
+                  <CircleAnim />
+                </div>
+
+                {/* OvalAnim */}
+                <div className="absolute translate-y-[50px]">
+                  <OvalAnim />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

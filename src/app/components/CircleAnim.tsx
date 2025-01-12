@@ -1,51 +1,63 @@
 "use client";
 
 import { motion, useAnimationFrame } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export default function CircleAnim() {
   const circleRef = useRef<SVGCircleElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const [pathBounds, setPathBounds] = useState({ width: 0, height: 0 });
 
-  const largeCircle = {
-    cx: 100,
-    cy: 100,
-    r: 70,
-  };
+  useEffect(() => {
+    if (pathRef.current) {
+      const bbox = pathRef.current.getBBox();
+      setPathBounds({ width: bbox.width, height: bbox.height });
+    }
+  }, []);
 
   useAnimationFrame((time) => {
-    if (circleRef.current) {
-      const angle = (time / 1000) % (2 * Math.PI); // Convert time to radians
-      const x = largeCircle.cx + largeCircle.r * Math.cos(angle);
-      const y = largeCircle.cy + largeCircle.r * Math.sin(angle);
-      circleRef.current.setAttribute("cx", x.toString());
-      circleRef.current.setAttribute("cy", y.toString());
+    if (circleRef.current && pathRef.current) {
+      const pathLength = pathRef.current.getTotalLength();
+      const progress = (time / 3000) % 1; // 3000ms để hoàn thành một vòng tròn
+      const point = pathRef.current.getPointAtLength(progress * pathLength);
+      circleRef.current.setAttribute("cx", point.x.toString());
+      circleRef.current.setAttribute("cy", point.y.toString());
     }
   });
 
+  const svgSize = 700; // Kích thước SVG
+  const radius = 250; // Bán kính đường tròn
+
   return (
-    <div className="font-polySans">
-      <svg
-        className="w-full h-full max-w-[800px] max-h-[800px]"
-        viewBox="0 0 200 200"
-        aria-label="Animated circle diagram"
-      >
-        {/* Circle Line */}
-        <circle
-          cx={largeCircle.cx}
-          cy={largeCircle.cy}
-          r={largeCircle.r}
+    <svg
+      width={svgSize}
+      height={svgSize}
+      viewBox={`0 0 ${svgSize} ${svgSize}`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Animated circle path"
+    >
+      <g transform={`translate(${svgSize / 2}, ${svgSize / 2})`}>
+        {/* Đường tròn */}
+        <path
+          ref={pathRef}
+          d={`
+            M 0 ${-radius}
+            A ${radius} ${radius} 0 1 1 0 ${radius}
+            A ${radius} ${radius} 0 1 1 0 ${-radius}
+          `}
+          stroke="black"
+          strokeWidth="1"
           fill="none"
-          stroke="#000"
-          strokeWidth="0.3"
         />
-        {/* Small Circle on the Line */}
+        {/* Hình tròn nhỏ di chuyển */}
         <motion.circle
           ref={circleRef}
-          r={5}
-          fill="#000"
-          initial={{ cx: largeCircle.cx + largeCircle.r, cy: largeCircle.cy }}
+          r={20}
+          fill="black"
+          initial={{ cx: 0, cy: -radius }} // Điểm bắt đầu
         />
-      </svg>
-    </div>
+      </g>
+    </svg>
   );
 }
