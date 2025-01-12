@@ -49,7 +49,7 @@ export default function OvalAnim() {
         />
         <motion.circle
           ref={circleRef}
-          r={10}
+          r={20}
           fill="#000"
           initial={{ cx: 310.012, cy: 317.089 }} // Starting point of the path
         />

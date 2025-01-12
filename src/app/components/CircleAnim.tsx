@@ -53,7 +53,7 @@ export default function CircleAnim() {
         {/* Hình tròn nhỏ di chuyển */}
         <motion.circle
           ref={circleRef}
-          r={20}
+          r={30}
           fill="black"
           initial={{ cx: 0, cy: -radius }} // Điểm bắt đầu
         />

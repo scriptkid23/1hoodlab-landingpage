@@ -84,18 +84,38 @@ export default function Home() {
             </div>
           </div>
           <div className="col-span-9">
-            <div className="bg-white flex  items-start justify-start h-screen">
+            <div className="bg-white flex relative h-full w-full">
               {/* Wrapper cho CircleAnim và OvalAnim */}
-              <div className="relative flex items-center justify-center ml-[33%] mt-[calc(100vh/3)]">
+              <div className="relative flex items-center justify-start">
                 {/* CircleAnim */}
                 <div className="absolute">
                   <CircleAnim />
                 </div>
 
                 {/* OvalAnim */}
-                <div className="absolute translate-y-[50px]">
+                <div className="absolute translate-x-[54px]">
                   <OvalAnim />
                 </div>
+                <div className="absolute w-[462px] translate-x-[95%]">
+                  <div className="text-black-950 font-polySans font-extrabold text-[48px] uppercase">
+                    <p>1hoodlab.</p>
+                    <p>next innovation</p>
+                  </div>
+                  <div className="text-black-950 font-polySans font-medium text-[14px] flex justify-end">
+                    <p className="max-w-[288px]">
+                      at 1HOODLAB, we are at the forefront of transforming
+                      digital experiences by leveraging blockchain, GameFi, and
+                      Web3 technologies. Our mission is to build a decentralized
+                      future that empowers communities, creators, and gamers
+                      worldwide.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Chữ "new" ở góc dưới bên trái */}
+              <div className="absolute bottom-0 left-0 text-black-950 font-polySans font-semibold text-[48px] p-2 uppercase ml-[6%] mb-[33px]">
+                new.
               </div>
             </div>
           </div>
