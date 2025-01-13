@@ -92,7 +92,7 @@ export default function CombinedAnim(props: Props) {
         <motion.circle
           ref={ovalRef}
           r={20}
-          fill="#000"
+          fill="#000000"
           initial={{ cx: 310.012, cy: 317.089 }}
         />
       </g>

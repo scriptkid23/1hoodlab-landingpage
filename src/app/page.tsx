@@ -88,10 +88,10 @@ export default function Home() {
               <div className="relative inline-flex items-center justify-end ">
                 <CombinedAnim />
 
-                <div className="absolute w-[462px]  inline-flex flex-col translate-x-[45%]">
-                  <div className="text-black-950 font-polySans font-extrabold text-[48px] uppercase">
-                    <p>1hoodlab.</p>
-                    <p>next innovation</p>
+                <div className="absolute w-[462px]  inline-flex flex-col translate-x-[45%] z-10">
+                  <div className="text-black-950 font-polySans font-extrabold text-[48px] uppercase z-10">
+                    <p className="mix-blend-difference">1hoodlab.</p>
+                    <p className="mix-blend-difference">next innovation</p>
                   </div>
                   <div className="text-black-950 font-polySans font-medium text-[14px] flex justify-end">
                     <p className="max-w-[288px]">
