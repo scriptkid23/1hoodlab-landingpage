@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { Button, NextUIProvider } from "@nextui-org/react";
 import SocialLink from "./components/SocialLink";
-import CircleAnim from "./components/CircleAnim";
-import OvalAnim from "./components/OvalAnim";
+import CombinedAnim from "./components/GroupAnim";
+import UpDownPoint from "./components/UpDownPoint";
 
 export default function Home() {
   return (
@@ -83,20 +83,12 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="col-span-9">
-            <div className="bg-white flex relative h-full w-full">
-              {/* Wrapper cho CircleAnim và OvalAnim */}
-              <div className="relative flex items-center justify-start">
-                {/* CircleAnim */}
-                <div className="absolute">
-                  <CircleAnim />
-                </div>
+          <div className="col-span-9 flex flex-col">
+            <div className="flex">
+              <div className="relative inline-flex items-center justify-end ">
+                <CombinedAnim />
 
-                {/* OvalAnim */}
-                <div className="absolute translate-x-[54px]">
-                  <OvalAnim />
-                </div>
-                <div className="absolute w-[462px] translate-x-[95%]">
+                <div className="absolute w-[462px]  inline-flex flex-col translate-x-[45%]">
                   <div className="text-black-950 font-polySans font-extrabold text-[48px] uppercase">
                     <p>1hoodlab.</p>
                     <p>next innovation</p>
@@ -112,10 +104,34 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
-              {/* Chữ "new" ở góc dưới bên trái */}
-              <div className="absolute bottom-0 left-0 text-black-950 font-polySans font-semibold text-[48px] p-2 uppercase ml-[6%] mb-[33px]">
+              <div className="flex-grow inline-flex justify-end p-14">
+                <div>
+                  <img src="/assets/images/ellipse.svg" alt="image" />
+                </div>
+              </div>
+            </div>
+            <div className="px-20 flex justify-between relative">
+              <p className="text-[48px] font-polySans font-extrabold uppercase text-black-950">
                 new.
+              </p>
+              <div className="flex w-[500px]">
+                <div className="relative w-[16.5rem] bottom-[60px]">
+                  <img
+                    src="/assets/images/ellipse1.svg"
+                    className="absolute inset-1"
+                  />
+                </div>
+                <div className="absolute right-[15%]">
+                  <UpDownPoint size={50} color="#000000" />
+                </div>
+                <div className=" absolute right-[5%] bottom-[30%]">
+                  <UpDownPoint
+                    size={20}
+                    color="#000000"
+                    distance={10}
+                    duration={0.8}
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -3,7 +3,10 @@
 import { motion, useAnimationFrame } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
-export default function OvalAnim() {
+interface Props {
+  className?: string;
+}
+export default function OvalAnim(props: Props) {
   const circleRef = useRef<SVGCircleElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const [pathBounds, setPathBounds] = useState({ width: 0, height: 0 });
@@ -30,6 +33,7 @@ export default function OvalAnim() {
 
   return (
     <svg
+      className={props.className}
       width={svgSize}
       height={svgSize}
       viewBox={`0 0 ${pathBounds.width + padding * 2} ${
