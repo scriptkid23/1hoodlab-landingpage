@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Twitter, Instagram, Linkedin, Github } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { InfiniteMoving } from "@/components/InfiniteMoving";
+import { Footer } from "@/components/Footer";
 const scrambleText = "!<>-_\\/[]{}—=+*^?#________";
 const categories = [
   "Blockchain",
@@ -20,19 +22,7 @@ const categories = [
 export default function Home() {
   const controls = useAnimationControls();
   const [scrambledText, setScrambledText] = useState("1hoodlabs");
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
 
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
-    };
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       controls.start({
@@ -69,6 +59,7 @@ export default function Home() {
       iterations += 1 / 3;
     }, 30);
   };
+
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-white">
       {/* Holographic gradient overlay */}
@@ -77,32 +68,9 @@ export default function Home() {
 
       {/* Content */}
       <div className="relative w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Continuous Flowing Categories */}
-        <div
-          className="overflow-hidden mb-12 sm:mb-16 lg:mb-24"
-          ref={containerRef}
-        >
-          <motion.div
-            className="flex whitespace-nowrap text-xs sm:text-sm text-neutral-600"
-            animate={{
-              x: [-containerWidth, 0],
-            }}
-            transition={{
-              x: {
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "loop",
-                duration: 20,
-                ease: "linear",
-              },
-            }}
-            style={{ width: `${containerWidth * 2}px` }}
-          >
-            {[...categories, ...categories].map((category, index) => (
-              <span key={index} className="inline-block mx-4">
-                {category}
-              </span>
-            ))}
-          </motion.div>
+        {/* Infinite Moving Categories */}
+        <div className="mb-12 sm:mb-16 lg:mb-24 relative">
+          <InfiniteMoving items={categories} speed={40} />
         </div>
 
         {/* Main Logo Area */}
@@ -121,47 +89,7 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between text-xs sm:text-sm text-neutral-600 gap-8 sm:gap-4">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-neutral-900">
-              <Logo className="h-6 sm:h-8 w-auto text-white" />
-            </div>
-            <p className="max-w-xl text-center sm:text-left text-sm sm:text-base">
-              Transforming digital experiences through blockchain, GameFi, and
-              Web3 technologies.
-            </p>
-          </div>
-          <div className="flex gap-6">
-            <a
-              href="#"
-              className="text-neutral-600 transition-colors hover:text-neutral-900"
-            >
-              <Twitter size={20} className="sm:w-6 sm:h-6" />
-              <span className="sr-only">Twitter</span>
-            </a>
-            <a
-              href="#"
-              className="text-neutral-600 transition-colors hover:text-neutral-900"
-            >
-              <Instagram size={20} className="sm:w-6 sm:h-6" />
-              <span className="sr-only">Instagram</span>
-            </a>
-            <a
-              href="#"
-              className="text-neutral-600 transition-colors hover:text-neutral-900"
-            >
-              <Linkedin size={20} className="sm:w-6 sm:h-6" />
-              <span className="sr-only">LinkedIn</span>
-            </a>
-            <a
-              href="#"
-              className="text-neutral-600 transition-colors hover:text-neutral-900"
-            >
-              <Github size={20} className="sm:w-6 sm:h-6" />
-              <span className="sr-only">GitHub</span>
-            </a>
-          </div>
-        </div>
+        <Footer />
       </div>
     </div>
   );
