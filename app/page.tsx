@@ -3,6 +3,7 @@ import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Twitter, Instagram, Linkedin, Github } from "lucide-react";
+import { Logo } from "@/components/logo";
 const scrambleText = "!<>-_\\/[]{}—=+*^?#________";
 const categories = [
   "Blockchain",
@@ -107,6 +108,7 @@ export default function Home() {
         {/* Main Logo Area */}
         <div className="flex flex-col items-center justify-center gap-10 sm:gap-16 lg:gap-20 mb-12 sm:mb-16 lg:mb-24">
           {/* Logo */}
+          <Logo className="h-24 w-auto sm:h-32 lg:h-40 text-neutral-900" />
 
           {/* Text with scramble effect */}
           <motion.h1
@@ -121,7 +123,9 @@ export default function Home() {
         {/* Footer */}
         <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between text-xs sm:text-sm text-neutral-600 gap-8 sm:gap-4">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-neutral-900"></div>
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-neutral-900">
+              <Logo className="h-6 sm:h-8 w-auto text-white" />
+            </div>
             <p className="max-w-xl text-center sm:text-left text-sm sm:text-base">
               Transforming digital experiences through blockchain, GameFi, and
               Web3 technologies.
