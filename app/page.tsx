@@ -1,12 +1,11 @@
 "use client";
 import { motion, useAnimationControls } from "framer-motion";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { Twitter, Instagram, Linkedin, Github } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Logo } from "@/components/logo";
 import { InfiniteMoving } from "@/components/InfiniteMoving";
 import { Footer } from "@/components/Footer";
 const scrambleText = "!<>-_\\/[]{}—=+*^?#________";
+
 const categories = [
   "Blockchain",
   "Frontend",
