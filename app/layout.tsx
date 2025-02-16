@@ -33,14 +33,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://1hoodlabs.com",
+    url: "https://1hoodlabs.xyz",
     siteName: "1hoodlabs",
     title: "1hoodlabs | Transforming Digital Experiences",
     description:
       "Revolutionizing digital experiences through blockchain, GameFi, and Web3 technologies.",
     images: [
       {
-        url: "https://1hoodlabs.com/og-image.jpg",
+        url: "https://1hoodlabs.xyz/icon.svg",
         width: 1200,
         height: 630,
         alt: "1hoodlabs - Transforming Digital Experiences",

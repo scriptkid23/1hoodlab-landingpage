@@ -37,7 +37,8 @@ export const Footer: React.FC = () => {
           <span className="sr-only">LinkedIn</span>
         </a>
         <a
-          href="#"
+          href="https://github.com/1hoodlab"
+          target="_blank"
           className="text-neutral-600 transition-colors hover:text-neutral-900"
         >
           <Github size={20} className="sm:w-6 sm:h-6" />
