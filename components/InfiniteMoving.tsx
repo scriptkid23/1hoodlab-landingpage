@@ -56,7 +56,7 @@ export const InfiniteMoving: React.FC<InfiniteMovingProps> = ({
         {items.map((item, index) => (
           <span
             key={index}
-            className="inline-block mx-4 text-sm sm:text-base text-neutral-600"
+            className="inline-block mx-4 text-sm sm:text-base text-neutral-600 font-sans font-normal"
           >
             {item}
           </span>

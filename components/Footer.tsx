@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
         <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-neutral-900">
           <Logo className="h-6 sm:h-8 w-auto text-white" />
         </div>
-        <p className="max-w-xl text-center sm:text-left text-sm sm:text-base">
+        <p className="max-w-xl text-center sm:text-left text-sm sm:text-base font-sans">
           Transforming digital experiences through blockchain, GameFi, and Web3
           technologies.
         </p>

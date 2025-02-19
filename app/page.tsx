@@ -8,14 +8,13 @@ const scrambleText = "!<>-_\\/[]{}—=+*^?#________";
 
 const categories = [
   "Blockchain",
-  "Frontend",
+  "Cloud Platform",
   "GameFi",
   "Web3",
   "DeFi",
   "NFT",
   "Metaverse",
   "AI",
-  "IoT",
 ];
 
 export default function Home() {
