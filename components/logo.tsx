@@ -9,10 +9,13 @@ interface LogoProps {
 }
 
 export function Logo({ className = "", enableTransition = false }: LogoProps) {
-  const [hoveredPath, setHoveredPath] = useState<number | null>(null);
+  const [, setHoveredPath] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  
+  // Always call the hook to avoid conditional hook usage
+  const pageTransition = usePageTransition();
   const { triggerTransition, updateLogoPosition } = enableTransition
-    ? usePageTransition()
+    ? pageTransition
     : { triggerTransition: () => {}, updateLogoPosition: () => {} };
 
   // Sync vị trí logo với shadow logo
@@ -46,34 +49,10 @@ export function Logo({ className = "", enableTransition = false }: LogoProps) {
     };
   }, [enableTransition, updateLogoPosition]);
 
-  const handlePathClick = (index: number, event: React.MouseEvent<SVGPathElement>) => {
+  const handlePathClick = (index: number) => {
     if (enableTransition) {
       const path = LOGO_PATHS[index];
-      const pathElement = event.currentTarget;
-      const svgElement = svgRef.current;
-      
-      if (pathElement && svgElement) {
-        // Lấy bounding box của path cụ thể
-        const pathBBox = pathElement.getBBox();
-        const svgRect = svgElement.getBoundingClientRect();
-        const svgViewBox = svgElement.viewBox.baseVal;
-        
-        // Tính toán tỷ lệ giữa kích thước thực tế và viewBox
-        const scaleX = svgRect.width / svgViewBox.width;
-        const scaleY = svgRect.height / svgViewBox.height;
-        
-        // Chuyển đổi tọa độ từ SVG coordinate system sang screen coordinate
-        const pathScreenRect = {
-          left: svgRect.left + pathBBox.x * scaleX,
-          top: svgRect.top + pathBBox.y * scaleY,
-          width: pathBBox.width * scaleX,
-          height: pathBBox.height * scaleY,
-        };
-
-        triggerTransition(path.url, path.color, path.d, {
-          svgRect: pathScreenRect,
-        });
-      }
+      triggerTransition(path.url, path.color, path.d);
     }
   };
 
@@ -93,7 +72,7 @@ export function Logo({ className = "", enableTransition = false }: LogoProps) {
           d={path.d}
           fill="currentColor"
           className={enableTransition ? "cursor-pointer" : ""}
-          onClick={(e) => handlePathClick(index, e)}
+          onClick={() => handlePathClick(index)}
           onMouseEnter={() => setHoveredPath(index)}
           onMouseLeave={() => setHoveredPath(null)}
           whileHover={

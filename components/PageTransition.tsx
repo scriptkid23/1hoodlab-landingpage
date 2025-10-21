@@ -1,7 +1,6 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
-import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
+import { motion } from "framer-motion";
+import { createContext, useContext, useState, ReactNode, useCallback } from "react";
 
 interface PositionData {
   svgRect: {
@@ -16,8 +15,7 @@ interface TransitionContextType {
   triggerTransition: (
     targetPath: string,
     color: string,
-    pathData: string,
-    position: PositionData
+    pathData: string
   ) => void;
   updateLogoPosition: (position: PositionData) => void;
 }
@@ -61,12 +59,8 @@ export const LOGO_PATHS = [
 export function PageTransitionProvider({ children }: { children: ReactNode }) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [activePathIndex, setActivePathIndex] = useState<number | null>(null);
-  const [transitionColor, setTransitionColor] = useState("#000000");
 
   const [logoPosition, setLogoPosition] = useState<PositionData | null>(null);
-  
-  const [clickedPathPosition, setClickedPathPosition] = useState<PositionData | null>(null);
-  const pathname = usePathname();
 
   const updateLogoPosition = useCallback((pos: PositionData) => {
     setLogoPosition(pos);
@@ -74,16 +68,13 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
 
   const triggerTransition = useCallback((
     targetPath: string,
-    color: string,
-    pathD: string,
-    pos: PositionData
+    _color: string,
+    pathD: string
   ) => {
    
     const pathIndex = LOGO_PATHS.findIndex((p) => p.d === pathD);
     
     setActivePathIndex(pathIndex);
-    setTransitionColor(color);
-    setClickedPathPosition(pos);
     setIsTransitioning(true);
 
     
