@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function ProductsPage() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-red-50 via-orange-50 to-pink-50">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,107,107,0.1),transparent_50%)]" />
 
