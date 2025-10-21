@@ -74,7 +74,12 @@ export default function Home() {
         {/* Main Logo Area */}
         <div className="flex flex-col items-center justify-center gap-10 sm:gap-16 lg:gap-20 mb-12 sm:mb-16 lg:mb-24">
           {/* Logo */}
-          <Logo className="h-24 w-auto sm:h-32 lg:h-40 text-neutral-900" />
+          <div className="overflow-visible p-8">
+            <Logo
+              className="h-24 w-auto sm:h-32 lg:h-40 text-neutral-900"
+              enableTransition={true}
+            />
+          </div>
 
           {/* Text with scramble effect */}
           <motion.h1

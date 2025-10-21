@@ -1,25 +1,116 @@
-export function Logo({ className = "" }: { className?: string }) {
+"use client";
+import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { usePageTransition, LOGO_PATHS } from "./PageTransition";
+
+interface LogoProps {
+  className?: string;
+  enableTransition?: boolean;
+}
+
+export function Logo({ className = "", enableTransition = false }: LogoProps) {
+  const [hoveredPath, setHoveredPath] = useState<number | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const { triggerTransition, updateLogoPosition } = enableTransition
+    ? usePageTransition()
+    : { triggerTransition: () => {}, updateLogoPosition: () => {} };
+
+  // Sync vị trí logo với shadow logo
+  useEffect(() => {
+    if (!enableTransition || !svgRef.current) return;
+
+    const updatePosition = () => {
+      if (svgRef.current) {
+        const rect = svgRef.current.getBoundingClientRect();
+        updateLogoPosition({
+          svgRect: {
+            top: rect.top,
+            left: rect.left,
+            width: rect.width,
+            height: rect.height,
+          },
+        });
+      }
+    };
+
+    // Update ngay khi mount
+    updatePosition();
+
+    // Update khi resize
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
+    };
+  }, [enableTransition, updateLogoPosition]);
+
+  const handlePathClick = (index: number, event: React.MouseEvent<SVGPathElement>) => {
+    if (enableTransition) {
+      const path = LOGO_PATHS[index];
+      const pathElement = event.currentTarget;
+      const svgElement = svgRef.current;
+      
+      if (pathElement && svgElement) {
+        // Lấy bounding box của path cụ thể
+        const pathBBox = pathElement.getBBox();
+        const svgRect = svgElement.getBoundingClientRect();
+        const svgViewBox = svgElement.viewBox.baseVal;
+        
+        // Tính toán tỷ lệ giữa kích thước thực tế và viewBox
+        const scaleX = svgRect.width / svgViewBox.width;
+        const scaleY = svgRect.height / svgViewBox.height;
+        
+        // Chuyển đổi tọa độ từ SVG coordinate system sang screen coordinate
+        const pathScreenRect = {
+          left: svgRect.left + pathBBox.x * scaleX,
+          top: svgRect.top + pathBBox.y * scaleY,
+          width: pathBBox.width * scaleX,
+          height: pathBBox.height * scaleY,
+        };
+
+        triggerTransition(path.url, path.color, path.d, {
+          svgRect: pathScreenRect,
+        });
+      }
+    }
+  };
+
   return (
     <svg
+      ref={svgRef}
       width="229"
       height="301"
       viewBox="0 0 229 301"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      className={`${className} ${enableTransition ? "overflow-visible" : ""}`}
     >
-      <path
-        d="M205.831 1.65717C216.451 -3.65982 228.848 4.50596 228.145 16.3556L217.156 201.783C216.454 213.633 203.179 220.279 193.262 213.747L38.0708 111.521C28.1534 104.989 29.0313 90.1768 39.6509 84.8598L205.831 1.65717Z"
-        fill="currentColor"
-      />
-      <path
-        d="M22.0918 202.147C11.3774 207.27 -0.868868 198.881 0.0485991 187.046L3.5759 141.545C4.49337 129.71 17.8865 123.306 27.6835 130.018L65.3492 155.821C75.1462 162.532 73.9993 177.326 63.2848 182.449L22.0918 202.147Z"
-        fill="currentColor"
-      />
-      <path
-        d="M100.553 298.927C89.8846 304.147 77.5634 295.868 78.3745 284.025L84.3034 197.454C85.1144 185.612 98.4494 179.087 108.306 185.711L180.361 234.127C190.218 240.751 189.204 255.554 178.536 260.773L100.553 298.927Z"
-        fill="currentColor"
-      />
+      {LOGO_PATHS.map((path, index) => (
+        <motion.path
+          key={index}
+          d={path.d}
+          fill="currentColor"
+          className={enableTransition ? "cursor-pointer" : ""}
+          onClick={(e) => handlePathClick(index, e)}
+          onMouseEnter={() => setHoveredPath(index)}
+          onMouseLeave={() => setHoveredPath(null)}
+          whileHover={
+            enableTransition
+              ? {
+                  scale: 1.05,
+                  filter: "drop-shadow(0 0 8px rgba(0,0,0,0.3))",
+                }
+              : {}
+          }
+          transition={{ duration: 0.3 }}
+          style={{
+            transformOrigin: "center",
+            vectorEffect: "non-scaling-stroke",
+          }}
+        />
+      ))}
     </svg>
   );
 }
