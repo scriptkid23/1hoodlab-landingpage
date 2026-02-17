@@ -1,7 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
+
+const HeroGlassScene = dynamic(
+  () => import("./HeroGlassScene").then((module) => module.HeroGlassScene),
+  { ssr: false }
+);
 
 export function HeroAnimation() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -50,9 +56,13 @@ export function HeroAnimation() {
   return (
     <div
       ref={wrapRef}
-      className="flex min-h-screen flex-col items-center justify-center"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
     >
-      <section className="w-full px-6 md:px-[120px]">
+      <div className="pointer-events-none absolute inset-0 z-20">
+        <HeroGlassScene />
+      </div>
+
+      <section className="relative z-10 w-full px-6 md:px-[120px]">
         <p
           ref={techRef}
           className="mb-1 text-2xl leading-8 font-normal text-rangitoto-950"
@@ -70,14 +80,14 @@ export function HeroAnimation() {
 
       <div
         ref={lineRef}
-        className="relative left-1/2 w-screen -translate-x-1/2"
+        className="relative left-1/2 z-10 w-screen -translate-x-1/2"
       >
         <div className="h-px w-full bg-rangitoto-950/10" />
         <div className="pointer-events-none absolute inset-y-0 left-0 w-28 bg-linear-to-r from-moon-mist-100 to-transparent md:w-64" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-linear-to-l from-moon-mist-100 to-transparent md:w-64" />
       </div>
 
-      <section className="flex w-full justify-end overflow-hidden px-6 pt-4 md:px-[120px] md:pt-0">
+      <section className="relative z-10 flex w-full justify-end overflow-hidden px-6 pt-4 md:px-[120px] md:pt-0">
         <h2
           ref={line2Ref}
           className="whitespace-nowrap text-right font-heading text-[40px] leading-tight font-normal text-rangitoto-950 md:text-[64px] md:leading-[79px]"
