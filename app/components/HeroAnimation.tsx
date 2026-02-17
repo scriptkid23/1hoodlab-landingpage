@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef, useLayoutEffect } from "react";
+import { useRef, useLayoutEffect, useState } from "react";
 import { gsap } from "gsap";
 
 const HeroGlassScene = dynamic(
@@ -10,6 +10,7 @@ const HeroGlassScene = dynamic(
 );
 
 export function HeroAnimation() {
+  const [modelVisible, setModelVisible] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLParagraphElement>(null);
   const line1Ref = useRef<HTMLHeadingElement>(null);
@@ -17,6 +18,8 @@ export function HeroAnimation() {
   const lineRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
+    setModelVisible(false);
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
@@ -48,6 +51,8 @@ export function HeroAnimation() {
         },
         "<"
       );
+
+      tl.call(() => setModelVisible(true), [], "+=0.05");
     }, wrapRef);
 
     return () => ctx.revert();
@@ -58,8 +63,8 @@ export function HeroAnimation() {
       ref={wrapRef}
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0 z-20">
-        <HeroGlassScene />
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <HeroGlassScene reveal={modelVisible} />
       </div>
 
       <section className="relative z-10 w-full px-6 md:px-[120px]">
