@@ -67,8 +67,8 @@ function GlassRibbon({ reveal, scrollProgress }: GlassRibbonProps) {
     const revealScale = 0.78 + revealProgress * 0.22;
     ribbonRef.current.scale.setScalar(revealScale * (1 - scrollBlend * 0.16));
     ribbonRef.current.position.x = -1.65 * scrollBlend;
-    ribbonRef.current.position.y = (1 - revealProgress) * -0.38 + scrollBlend * 0.34;
-    ribbonRef.current.rotation.y += delta * (0.35 + scrollBlend * 1.45);
+    ribbonRef.current.position.y = (1 - revealProgress) * -0.38 + scrollBlend * 0.06;
+    ribbonRef.current.rotation.y += delta * (0.35 + scrollBlend * 0.6);
     const targetRotX =
       Math.sin(state.clock.elapsedTime * 0.6) * 0.05 * revealProgress - scrollBlend * 0.28;
     const targetRotZ = scrollBlend * 0.34 + Math.sin(state.clock.elapsedTime * 0.45) * 0.04;

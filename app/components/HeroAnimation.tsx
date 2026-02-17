@@ -98,12 +98,19 @@ export function HeroAnimation() {
     };
   }, []);
 
+  const backgroundFade = Math.min(Math.max((scrollProgress - 0.08) / 0.92, 0), 1);
+
   return (
     <div
       ref={wrapRef}
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
     >
-      <div className="pointer-events-none fixed inset-0 z-0">
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-white"
+        style={{ opacity: backgroundFade }}
+      />
+
+      <div className="pointer-events-none fixed inset-0 z-1">
         <HeroGlassScene reveal={modelVisible} scrollProgress={scrollProgress} />
       </div>
 

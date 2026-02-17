@@ -31,7 +31,7 @@ export default function Home() {
 
       <section
         id="scroll-test-section"
-        className="relative z-10 mx-auto flex min-h-[120vh] w-full max-w-[1200px] items-center px-6 py-20 md:px-[120px]"
+        className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] items-center px-6 md:px-[120px]"
       >
         <div className="ml-auto w-full rounded-3xl border border-rangitoto-950/10 bg-white/40 p-8 backdrop-blur-sm md:w-[68%] md:p-12">
           <p className="text-sm uppercase tracking-[0.2em] text-rangitoto-950/60">Test section</p>
