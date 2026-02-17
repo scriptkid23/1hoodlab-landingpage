@@ -62,16 +62,27 @@ function GlassRibbon({ reveal, scrollProgress }: GlassRibbonProps) {
       delta
     );
     const scrollBlend = scrollProgressRef.current;
+    const section3Progress = THREE.MathUtils.clamp((scrollBlend - 0.68) / 0.32, 0, 1);
 
     ribbonRef.current.visible = revealProgress > 0.02;
     const revealScale = 0.78 + revealProgress * 0.22;
-    ribbonRef.current.scale.setScalar(revealScale * (1 - scrollBlend * 0.16));
-    ribbonRef.current.position.x = -1.65 * scrollBlend;
-    ribbonRef.current.position.y = (1 - revealProgress) * -0.38 + scrollBlend * 0.06;
+    const baseScale = revealScale * (1 - scrollBlend * 0.16);
+    const section3Scale = revealScale * 1.45;
+    ribbonRef.current.scale.setScalar(
+      THREE.MathUtils.lerp(baseScale, section3Scale, section3Progress)
+    );
+
+    const baseX = -1.65 * scrollBlend;
+    const baseY = (1 - revealProgress) * -0.38 + scrollBlend * 0.06;
+    ribbonRef.current.position.x = THREE.MathUtils.lerp(baseX, 0, section3Progress);
+    ribbonRef.current.position.y = THREE.MathUtils.lerp(baseY, -0.9, section3Progress);
+
     ribbonRef.current.rotation.y += delta * (0.35 + scrollBlend * 0.6);
-    const targetRotX =
+    const baseRotX =
       Math.sin(state.clock.elapsedTime * 0.6) * 0.05 * revealProgress - scrollBlend * 0.28;
-    const targetRotZ = scrollBlend * 0.34 + Math.sin(state.clock.elapsedTime * 0.45) * 0.04;
+    const baseRotZ = scrollBlend * 0.34 + Math.sin(state.clock.elapsedTime * 0.45) * 0.04;
+    const targetRotX = THREE.MathUtils.lerp(baseRotX, 0, section3Progress);
+    const targetRotZ = THREE.MathUtils.lerp(baseRotZ, 0, section3Progress);
     ribbonRef.current.rotation.x = THREE.MathUtils.damp(
       ribbonRef.current.rotation.x,
       targetRotX,

@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { useHeroScene } from "./HeroSceneContext";
 
 export function HeroAnimation() {
-  const { setModelVisible, setScrollProgress } = useHeroScene();
+  const { setModelVisible, setScrollProgress, setSection4Progress } = useHeroScene();
   const wrapRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLParagraphElement>(null);
   const line1Ref = useRef<HTMLHeadingElement>(null);
@@ -63,17 +63,32 @@ export function HeroAnimation() {
       const hero = wrapRef.current;
       if (!hero) return;
       const viewportHeight = window.innerHeight || 1;
-      const testSection = document.getElementById("scroll-test-section");
+      const section3 = document.getElementById("section-3");
+      const section2 = document.getElementById("section-2");
+      const section4 = document.getElementById("section-4");
       const scrollY = window.scrollY || window.pageYOffset;
       const heroStart = hero.offsetTop;
-      const targetY = testSection
-        ? testSection.offsetTop + testSection.offsetHeight * 0.5 - viewportHeight * 0.5
+      const targetSection = section3 ?? section2;
+      const targetY = targetSection
+        ? targetSection.offsetTop + targetSection.offsetHeight * 0.5 - viewportHeight * 0.5
         : heroStart + viewportHeight;
       const progress = Math.min(
         Math.max((scrollY - heroStart) / Math.max(targetY - heroStart, 1), 0),
         1
       );
       setScrollProgress(progress);
+
+      if (section4) {
+        const section4Rect = section4.getBoundingClientRect();
+        const section4Range = Math.max(section4Rect.height + viewportHeight * 0.2, 1);
+        const nextSection4Progress = Math.min(
+          Math.max((viewportHeight * 0.9 - section4Rect.top) / section4Range, 0),
+          1
+        );
+        setSection4Progress(nextSection4Progress);
+      } else {
+        setSection4Progress(0);
+      }
     };
 
     const onScroll = () => {
@@ -93,8 +108,9 @@ export function HeroAnimation() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", updateProgress);
       setScrollProgress(0);
+      setSection4Progress(0);
     };
-  }, [setScrollProgress]);
+  }, [setModelVisible, setScrollProgress, setSection4Progress]);
 
   return (
     <div

@@ -7,6 +7,8 @@ type HeroSceneContextValue = {
   setModelVisible: (value: boolean) => void;
   scrollProgress: number;
   setScrollProgress: (value: number) => void;
+  section4Progress: number;
+  setSection4Progress: (value: number) => void;
 };
 
 const HeroSceneContext = createContext<HeroSceneContextValue | null>(null);
@@ -14,10 +16,18 @@ const HeroSceneContext = createContext<HeroSceneContextValue | null>(null);
 export function HeroSceneProvider({ children }: { children: React.ReactNode }) {
   const [modelVisible, setModelVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [section4Progress, setSection4Progress] = useState(0);
 
   const value = useMemo(
-    () => ({ modelVisible, setModelVisible, scrollProgress, setScrollProgress }),
-    [modelVisible, scrollProgress]
+    () => ({
+      modelVisible,
+      setModelVisible,
+      scrollProgress,
+      setScrollProgress,
+      section4Progress,
+      setSection4Progress,
+    }),
+    [modelVisible, scrollProgress, section4Progress]
   );
 
   return <HeroSceneContext.Provider value={value}>{children}</HeroSceneContext.Provider>;
