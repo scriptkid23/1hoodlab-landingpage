@@ -1,17 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useRef, useLayoutEffect, useState, useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
-
-const HeroGlassScene = dynamic(
-  () => import("./HeroGlassScene").then((module) => module.HeroGlassScene),
-  { ssr: false }
-);
+import { useHeroScene } from "./HeroSceneContext";
 
 export function HeroAnimation() {
-  const [modelVisible, setModelVisible] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const { setModelVisible, setScrollProgress } = useHeroScene();
   const wrapRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLParagraphElement>(null);
   const line1Ref = useRef<HTMLHeadingElement>(null);
@@ -24,14 +18,14 @@ export function HeroAnimation() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
-      // Technology label: from above
+      // Technology label enters from top.
       tl.from(techRef.current, {
         y: -20,
         autoAlpha: 0,
         duration: 0.5,
       });
 
-      // Both lines + divider at the same time: line1 đổ xuống, line2 đổ lên (whole block, no stagger)
+      // Headings and divider animate together without stagger.
       tl.from(line1Ref.current, {
         y: -48,
         autoAlpha: 0,
@@ -56,8 +50,11 @@ export function HeroAnimation() {
       tl.call(() => setModelVisible(true), [], "+=0.05");
     }, wrapRef);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      setModelVisible(false);
+      ctx.revert();
+    };
+  }, [setModelVisible]);
 
   useEffect(() => {
     let ticking = false;
@@ -95,26 +92,16 @@ export function HeroAnimation() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", updateProgress);
+      setScrollProgress(0);
     };
-  }, []);
-
-  const backgroundFade = Math.min(Math.max((scrollProgress - 0.08) / 0.92, 0), 1);
+  }, [setScrollProgress]);
 
   return (
     <div
       ref={wrapRef}
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
+      className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden"
     >
-      <div
-        className="pointer-events-none fixed inset-0 z-0 bg-white"
-        style={{ opacity: backgroundFade }}
-      />
-
-      <div className="pointer-events-none fixed inset-0 z-1">
-        <HeroGlassScene reveal={modelVisible} scrollProgress={scrollProgress} />
-      </div>
-
-      <section className="relative z-10 w-full px-6 md:px-[120px]">
+      <section className="relative z-20 w-full px-6 md:px-[120px]">
         <p
           ref={techRef}
           className="mb-1 text-2xl leading-8 font-normal text-rangitoto-950"
@@ -132,14 +119,14 @@ export function HeroAnimation() {
 
       <div
         ref={lineRef}
-        className="relative left-1/2 z-10 w-screen -translate-x-1/2"
+        className="relative left-1/2 z-20 w-screen -translate-x-1/2"
       >
         <div className="h-px w-full bg-rangitoto-950/10" />
         <div className="pointer-events-none absolute inset-y-0 left-0 w-28 bg-linear-to-r from-moon-mist-100 to-transparent md:w-64" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-linear-to-l from-moon-mist-100 to-transparent md:w-64" />
       </div>
 
-      <section className="relative z-10 flex w-full justify-end overflow-hidden px-6 pt-4 md:px-[120px] md:pt-0">
+      <section className="relative z-20 flex w-full justify-end overflow-hidden px-6 pt-4 md:px-[120px] md:pt-0">
         <h2
           ref={line2Ref}
           className="whitespace-nowrap text-right font-heading text-[40px] leading-tight font-normal text-rangitoto-950 md:text-[64px] md:leading-[79px]"
