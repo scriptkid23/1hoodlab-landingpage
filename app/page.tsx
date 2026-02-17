@@ -2,64 +2,71 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen bg-moon-mist-100 text-rangitoto-950">
+      <div className="container relative mx-auto min-h-screen w-full overflow-hidden">
+        <header className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-6 pt-6 md:px-[120px] md:pt-[34px]">
+          <Image
+            src="/assets/brands/brand.svg"
+            alt="1hudlabs"
+            width={118}
+            height={24}
+            priority
+          />
+
+          <button
+            type="button"
+            className="flex h-10 w-[100px] items-center justify-center gap-2 rounded-full border border-rangitoto-950 text-sm font-normal text-rangitoto-950"
+          >
+            <span>Try now</span>
+            <span aria-hidden>→</span>
+          </button>
+        </header>
+
+        <div className="flex min-h-screen flex-col items-center justify-center">
+          <section className="w-full px-6 md:px-[120px]">
+            <p className="mb-1 text-2xl leading-8 font-normal text-rangitoto-950">
+              Technology
+            </p>
+
+            <h1 className="font-heading text-[40px] leading-tight font-normal text-rangitoto-950 md:text-[64px] md:leading-[79px]">
+              The fastest, most reliable way
+            </h1>
+          </section>
+
+          <div className="relative left-1/2 w-screen -translate-x-1/2">
+            <div className="h-px w-full bg-rangitoto-950/10" />
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-28 bg-linear-to-r from-moon-mist-100 to-transparent md:w-64" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-linear-to-l from-moon-mist-100 to-transparent md:w-64" />
+          </div>
+
+          <section className="flex w-full justify-end px-6 pt-4 md:px-[120px] md:pt-0">
+            <h2 className="whitespace-nowrap text-right font-heading text-[40px] leading-tight font-normal text-rangitoto-950 md:text-[64px] md:leading-[79px]">
+              to go from <span className="font-bold text-black font-satoshi">idea</span> to{" "}
+              <span className="font-bold text-black font-satoshi">production</span>
+            </h2>
+          </section>
+        </div>
+
+        <aside className="absolute bottom-8 right-0 px-6 md:bottom-[34px] md:right-[120px] md:px-0">
+          <p className="mb-2 w-[100px] font-satoshi text-[22px] font-normal leading-[30px] text-rangitoto-950">
+            Trusted by
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          <div className="flex flex-wrap items-center justify-end gap-6 font-satoshi text-[18px] font-normal leading-[24px] text-black md:justify-end">
+            <span className="before:mr-3 before:inline-block before:h-[16px] before:w-[6px] before:bg-black before:align-middle">
+              Web3
+            </span>
+            <span className="before:mr-3 before:inline-block before:h-[16px] before:w-[6px] before:bg-black before:align-middle">
+              artbase
+            </span>
+            <span className="before:mr-3 before:inline-block before:h-[16px] before:w-[6px] before:bg-black before:align-middle">
+              dApps
+            </span>
+            <span className="before:mr-3 before:inline-block before:h-[16px] before:w-[6px] before:bg-black before:align-middle">
+              Snipers
+            </span>
+          </div>
+        </aside>
+      </div>
+    </main>
   );
 }

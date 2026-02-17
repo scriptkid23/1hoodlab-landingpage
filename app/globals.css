@@ -50,7 +50,9 @@
 
   --color-moon-mist-50: #f7f7f3;
   --font-sans: var(--font-satoshi);
+  --font-satoshi: var(--font-satoshi);
   --font-heading: var(--font-clash-display);
+  --font-clash-display: var(--font-clash-display);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
