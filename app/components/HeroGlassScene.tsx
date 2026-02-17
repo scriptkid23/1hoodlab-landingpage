@@ -16,15 +16,33 @@ import { BlendFunction } from "postprocessing";
 
 type GlassRibbonProps = {
   reveal: boolean;
+  scrollProgress: number;
 };
 
-function GlassRibbon({ reveal }: GlassRibbonProps) {
+function GlassRibbon({ reveal, scrollProgress }: GlassRibbonProps) {
   const { scene } = useGLTF("/assets/models/model.glb");
   const ribbonRef = useRef<THREE.Group>(null);
   const fresnelEdgeA = useMemo(() => new THREE.Color("#5b7cff"), []);
   const fresnelEdgeB = useMemo(() => new THREE.Color("#7a4dff"), []);
   const chromaOffset = useMemo(() => new THREE.Vector2(0.00028, 0.00014), []);
   const revealProgressRef = useRef(0);
+  const scrollProgressRef = useRef(0);
+  const startGlassColor = useMemo(() => new THREE.Color("#ffffff"), []);
+  const endGlassColor = useMemo(() => new THREE.Color("#05060f"), []);
+  const startAttenuationColor = useMemo(() => new THREE.Color("#f3f6ff"), []);
+  const endAttenuationColor = useMemo(() => new THREE.Color("#1b1630"), []);
+  const glassColor = useMemo(
+    () => `#${startGlassColor.clone().lerp(endGlassColor, scrollProgress).getHexString()}`,
+    [startGlassColor, endGlassColor, scrollProgress]
+  );
+  const attenuationColor = useMemo(
+    () =>
+      `#${startAttenuationColor
+        .clone()
+        .lerp(endAttenuationColor, scrollProgress)
+        .getHexString()}`,
+    [startAttenuationColor, endAttenuationColor, scrollProgress]
+  );
 
   useFrame((state, delta) => {
     if (!ribbonRef.current) return;
@@ -37,12 +55,35 @@ function GlassRibbon({ reveal }: GlassRibbonProps) {
       delta
     );
     const revealProgress = revealProgressRef.current;
+    scrollProgressRef.current = THREE.MathUtils.damp(
+      scrollProgressRef.current,
+      scrollProgress,
+      5,
+      delta
+    );
+    const scrollBlend = scrollProgressRef.current;
 
     ribbonRef.current.visible = revealProgress > 0.02;
-    ribbonRef.current.scale.setScalar(0.78 + revealProgress * 0.22);
-    ribbonRef.current.position.y = (1 - revealProgress) * -0.38;
-    ribbonRef.current.rotation.y += delta * 0.35;
-    ribbonRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.6) * 0.05 * revealProgress;
+    const revealScale = 0.78 + revealProgress * 0.22;
+    ribbonRef.current.scale.setScalar(revealScale * (1 - scrollBlend * 0.16));
+    ribbonRef.current.position.x = -1.65 * scrollBlend;
+    ribbonRef.current.position.y = (1 - revealProgress) * -0.38 + scrollBlend * 0.34;
+    ribbonRef.current.rotation.y += delta * (0.35 + scrollBlend * 1.45);
+    const targetRotX =
+      Math.sin(state.clock.elapsedTime * 0.6) * 0.05 * revealProgress - scrollBlend * 0.28;
+    const targetRotZ = scrollBlend * 0.34 + Math.sin(state.clock.elapsedTime * 0.45) * 0.04;
+    ribbonRef.current.rotation.x = THREE.MathUtils.damp(
+      ribbonRef.current.rotation.x,
+      targetRotX,
+      6,
+      delta
+    );
+    ribbonRef.current.rotation.z = THREE.MathUtils.damp(
+      ribbonRef.current.rotation.z,
+      targetRotZ,
+      6,
+      delta
+    );
   });
 
   useEffect(() => {
@@ -98,8 +139,8 @@ function GlassRibbon({ reveal }: GlassRibbonProps) {
                   roughness={0.03}
                   ior={1.18}
                   thickness={0.28}
-                  color="#ffffff"
-                  attenuationColor="#f3f6ff"
+                  color={glassColor}
+                  attenuationColor={attenuationColor}
                   attenuationDistance={1.3}
                   chromaticAberration={0.009}
                   anisotropy={0.03}
@@ -134,9 +175,10 @@ function GlassRibbon({ reveal }: GlassRibbonProps) {
 
 type HeroGlassSceneProps = {
   reveal?: boolean;
+  scrollProgress?: number;
 };
 
-export function HeroGlassScene({ reveal = true }: HeroGlassSceneProps) {
+export function HeroGlassScene({ reveal = true, scrollProgress = 0 }: HeroGlassSceneProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -185,7 +227,7 @@ export function HeroGlassScene({ reveal = true }: HeroGlassSceneProps) {
 
       <Suspense fallback={null}>
         <group position={[0, 0, 0]}>
-          <GlassRibbon reveal={reveal} />
+          <GlassRibbon reveal={reveal} scrollProgress={scrollProgress} />
         </group>
       </Suspense>
     </Canvas>

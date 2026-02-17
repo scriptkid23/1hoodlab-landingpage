@@ -28,6 +28,22 @@ export default function Home() {
 
         <TrustedByTyping />
       </div>
+
+      <section
+        id="scroll-test-section"
+        className="relative z-10 mx-auto flex min-h-[120vh] w-full max-w-[1200px] items-center px-6 py-20 md:px-[120px]"
+      >
+        <div className="ml-auto w-full rounded-3xl border border-rangitoto-950/10 bg-white/40 p-8 backdrop-blur-sm md:w-[68%] md:p-12">
+          <p className="text-sm uppercase tracking-[0.2em] text-rangitoto-950/60">Test section</p>
+          <h2 className="mt-4 font-heading text-3xl leading-tight md:text-5xl">
+            Scroll here to test the hero model behavior
+          </h2>
+          <p className="mt-4 max-w-2xl text-base text-rangitoto-950/70 md:text-lg">
+            This is a temporary section for checking scroll-linked animation. You can replace it
+            with real content later.
+          </p>
+        </div>
+      </section>
     </main>
   );
 }

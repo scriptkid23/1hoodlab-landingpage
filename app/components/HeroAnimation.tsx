@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect, useState, useEffect } from "react";
 import { gsap } from "gsap";
 
 const HeroGlassScene = dynamic(
@@ -11,6 +11,7 @@ const HeroGlassScene = dynamic(
 
 export function HeroAnimation() {
   const [modelVisible, setModelVisible] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const wrapRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLParagraphElement>(null);
   const line1Ref = useRef<HTMLHeadingElement>(null);
@@ -58,13 +59,52 @@ export function HeroAnimation() {
     return () => ctx.revert();
   }, []);
 
+  useEffect(() => {
+    let ticking = false;
+
+    const updateProgress = () => {
+      const hero = wrapRef.current;
+      if (!hero) return;
+      const viewportHeight = window.innerHeight || 1;
+      const testSection = document.getElementById("scroll-test-section");
+      const scrollY = window.scrollY || window.pageYOffset;
+      const heroStart = hero.offsetTop;
+      const targetY = testSection
+        ? testSection.offsetTop + testSection.offsetHeight * 0.5 - viewportHeight * 0.5
+        : heroStart + viewportHeight;
+      const progress = Math.min(
+        Math.max((scrollY - heroStart) / Math.max(targetY - heroStart, 1), 0),
+        1
+      );
+      setScrollProgress(progress);
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        updateProgress();
+        ticking = false;
+      });
+    };
+
+    updateProgress();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateProgress);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", updateProgress);
+    };
+  }, []);
+
   return (
     <div
       ref={wrapRef}
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <HeroGlassScene reveal={modelVisible} />
+      <div className="pointer-events-none fixed inset-0 z-0">
+        <HeroGlassScene reveal={modelVisible} scrollProgress={scrollProgress} />
       </div>
 
       <section className="relative z-10 w-full px-6 md:px-[120px]">
