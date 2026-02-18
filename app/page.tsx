@@ -6,7 +6,9 @@ import { FixedModelLayer } from "./components/FixedModelLayer";
 import { HeroAnimation } from "./components/HeroAnimation";
 import { HeroSceneProvider } from "./components/HeroSceneContext";
 import { ScrollSmootherProvider } from "./components/ScrollSmootherProvider";
+import { TechStackSection } from "./components/TechStackSection";
 import { TrustedByTyping } from "./components/TrustedByTyping";
+import { WhatWeDoSection } from "./components/WhatWeDoSection";
 
 export default function Home() {
   return (
@@ -42,41 +44,9 @@ export default function Home() {
               <TrustedByTyping />
             </div>
 
-            <section
-              id="section-2"
-              className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] items-center px-6 md:px-[120px]"
-            >
-              <div className="ml-auto w-full rounded-3xl border border-rangitoto-950/10 bg-white/40 p-8 backdrop-blur-sm md:w-[68%] md:p-12">
-                <p className="text-sm uppercase tracking-[0.2em] text-rangitoto-950/60">
-                  Section 2
-                </p>
-                <h2 className="mt-4 font-heading text-3xl leading-tight md:text-5xl">
-                  Build and launch faster with confidence
-                </h2>
-                <p className="mt-4 max-w-2xl text-base text-rangitoto-950/70 md:text-lg">
-                  This block is a placeholder for your second section content and keeps the scroll
-                  flow consistent for animation transitions.
-                </p>
-              </div>
-            </section>
+            <WhatWeDoSection />
 
-            <section
-              id="section-3"
-              className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] items-center px-6 md:px-[120px]"
-            >
-              <div className="w-full rounded-3xl border border-rangitoto-950/10 bg-white/45 p-8 backdrop-blur-sm md:w-[68%] md:p-12">
-                <p className="text-sm uppercase tracking-[0.2em] text-rangitoto-950/60">
-                  Section 3
-                </p>
-                <h2 className="mt-4 font-heading text-3xl leading-tight md:text-5xl">
-                  Production-ready delivery from idea to scale
-                </h2>
-                <p className="mt-4 max-w-2xl text-base text-rangitoto-950/70 md:text-lg">
-                  This section is used as the trigger area for the final hero model state while
-                  scrolling.
-                </p>
-              </div>
-            </section>
+            <TechStackSection />
 
             <section
               id="section-4"
