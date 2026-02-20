@@ -47,9 +47,9 @@ export function TechStackSection() {
       ref={sectionRef}
       className="relative z-10 flex min-h-screen w-full flex-col items-center px-6 md:px-[120px]"
     >
-      <div className="mx-auto flex w-full flex-col items-center gap-12 md:gap-16">
+      <div className="mx-auto flex w-full flex-col items-center gap-16">
         {/* Line 1: Built for | Line 2: scale and reliability */}
-        <div className="flex w-full flex-col items-center text-center">
+        <div className="flex w-full flex-col items-center text-center py-20">
           <h2
             className="mt-3 flex flex-col items-center font-heading text-9xl font-bold uppercase leading-tight text-black"
             style={{
