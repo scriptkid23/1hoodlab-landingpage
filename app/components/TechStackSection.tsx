@@ -161,7 +161,13 @@ export function TechStackSection() {
               viewBox="0 0 24 24"
               fill="currentColor"
             >
-              <path d="M8 5v14l11-7L8 5z" />
+              <path
+                d="M8 5v14l11-7L8 5z"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                strokeLinejoin="round"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
         </div>
