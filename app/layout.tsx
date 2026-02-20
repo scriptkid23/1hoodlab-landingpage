@@ -108,7 +108,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${satoshi.variable} ${clashDisplay.variable} antialiased`}>
+      <body
+        className={`${satoshi.variable} ${clashDisplay.variable} antialiased`}
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

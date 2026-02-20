@@ -4,6 +4,7 @@ import Image from "next/image";
 import { BackgroundFadeLayer } from "./components/BackgroundFadeLayer";
 import { FixedModelLayer } from "./components/FixedModelLayer";
 import { HeroAnimation } from "./components/HeroAnimation";
+import { PageLoadingOverlay } from "./components/PageLoadingOverlay";
 import { HeroSceneProvider } from "./components/HeroSceneContext";
 import { ScrollSmootherProvider } from "./components/ScrollSmootherProvider";
 import { TechStackSection } from "./components/TechStackSection";
@@ -13,6 +14,7 @@ import { WhatWeDoSection } from "./components/WhatWeDoSection";
 export default function Home() {
   return (
     <HeroSceneProvider>
+      <PageLoadingOverlay />
       <BackgroundFadeLayer />
       <FixedModelLayer />
       <ScrollSmootherProvider />

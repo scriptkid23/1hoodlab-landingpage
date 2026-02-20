@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useHeroScene } from "./HeroSceneContext";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   Center,
@@ -21,6 +22,7 @@ type GlassRibbonProps = {
 
 function GlassRibbon({ reveal, scrollProgress }: GlassRibbonProps) {
   const { scene } = useGLTF("/assets/models/model.glb");
+  const { setModelLoaded } = useHeroScene();
   const ribbonRef = useRef<THREE.Group>(null);
   const fresnelEdgeA = useMemo(() => new THREE.Color("#5b7cff"), []);
   const fresnelEdgeB = useMemo(() => new THREE.Color("#7a4dff"), []);
@@ -104,6 +106,10 @@ function GlassRibbon({ reveal, scrollProgress }: GlassRibbonProps) {
       }
     });
   }, [scene]);
+
+  useEffect(() => {
+    setModelLoaded(true);
+  }, [setModelLoaded]);
 
   const addFresnelTint = useCallback(
     (shader: { uniforms: Record<string, { value: unknown }>; fragmentShader: string }) => {
