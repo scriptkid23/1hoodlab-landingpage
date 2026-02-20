@@ -1,11 +1,22 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useHeroScene } from "./HeroSceneContext";
 
+const FALLBACK_READY_MS = 6000;
+
 export function HeroAnimation() {
-  const { setModelVisible, setScrollProgress, setSection4Progress } = useHeroScene();
+  const { pageReady, setModelVisible, setScrollProgress, setSection4Progress } = useHeroScene();
+  const [fallbackReady, setFallbackReady] = useState(false);
+
+  // Fallback: run animation anyway after 6s if pageReady never fires
+  useEffect(() => {
+    const t = setTimeout(() => setFallbackReady(true), FALLBACK_READY_MS);
+    return () => clearTimeout(t);
+  }, []);
+
+  const shouldAnimate = pageReady || fallbackReady;
   const wrapRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLParagraphElement>(null);
   const line1Ref = useRef<HTMLHeadingElement>(null);
@@ -13,40 +24,36 @@ export function HeroAnimation() {
   const lineRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
+    const targets = [techRef.current, line1Ref.current, line2Ref.current, lineRef.current].filter(
+      Boolean
+    );
+
+    if (!shouldAnimate) {
+      gsap.set(targets, { autoAlpha: 0 });
+      return;
+    }
+
     setModelVisible(false);
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+      const tech = techRef.current;
+      const line1 = line1Ref.current;
+      const line2 = line2Ref.current;
+      const line = lineRef.current;
 
-      // Technology label enters from top.
-      tl.from(techRef.current, {
-        y: -20,
-        autoAlpha: 0,
-        duration: 0.5,
-      });
-
-      // Headings and divider animate together without stagger.
-      tl.from(line1Ref.current, {
-        y: -48,
-        autoAlpha: 0,
-        duration: 0.6,
-      });
-      tl.from(
-        line2Ref.current,
-        { y: 48, autoAlpha: 0, duration: 0.6 },
-        "<"
-      );
-      tl.from(
-        lineRef.current,
-        {
-          scaleX: 0,
-          autoAlpha: 0,
-          duration: 0.4,
-          transformOrigin: "center",
-        },
-        "<"
-      );
-
+      // Use fromTo so we explicitly animate to visible (elements may already be autoAlpha:0 from loading)
+      if (tech) tl.fromTo(tech, { y: -20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5 });
+      if (line1) tl.fromTo(line1, { y: -48, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6 });
+      if (line2)
+        tl.fromTo(line2, { y: 48, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6 }, "<");
+      if (line)
+        tl.fromTo(
+          line,
+          { scaleX: 0, autoAlpha: 0, transformOrigin: "center" },
+          { scaleX: 1, autoAlpha: 1, duration: 0.4, transformOrigin: "center" },
+          "<"
+        );
       tl.call(() => setModelVisible(true), [], "+=0.05");
     }, wrapRef);
 
@@ -54,7 +61,7 @@ export function HeroAnimation() {
       setModelVisible(false);
       ctx.revert();
     };
-  }, [setModelVisible]);
+  }, [shouldAnimate, setModelVisible]);
 
   useEffect(() => {
     let ticking = false;

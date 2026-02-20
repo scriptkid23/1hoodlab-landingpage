@@ -9,7 +9,7 @@ const MIN_DISPLAY_MS = 800;
 const MAX_WAIT_MS = 5000;
 
 export function PageLoadingOverlay() {
-  const { modelLoaded } = useHeroScene();
+  const { modelLoaded, setPageReady } = useHeroScene();
 
   // Lock scroll while loading
   useEffect(() => {
@@ -39,6 +39,9 @@ export function PageLoadingOverlay() {
     const el = document.getElementById("page-loading-overlay");
     if (!el) return;
 
+    // Start hero animation as soon as we begin fading (don't wait for onComplete)
+    setPageReady(true);
+
     gsap.to(el, {
       opacity: 0,
       duration: 0.6,
@@ -49,7 +52,7 @@ export function PageLoadingOverlay() {
         document.body.style.overflow = "";
       },
     });
-  }, [canHide]);
+  }, [canHide, setPageReady]);
 
   return (
     <div
