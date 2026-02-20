@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -14,6 +15,39 @@ export function TechStackSection() {
   const line1Ref = useRef<HTMLSpanElement>(null);
   const line2Ref = useRef<HTMLSpanElement>(null);
   const playButtonRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  const handlePlayClick = useCallback(() => {
+    const button = playButtonRef.current;
+    const overlay = overlayRef.current;
+    if (!button || !overlay) return;
+
+    const rect = button.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // Position overlay at play button center
+    gsap.set(overlay, {
+      left: centerX,
+      top: centerY,
+      xPercent: -50,
+      yPercent: -50,
+      scale: 0,
+    });
+
+    // Radiate black overlay from play icon to cover entire screen
+    gsap.to(overlay, {
+      scale: 1,
+      duration: 1.5,
+      ease: "circ.inOut",
+      onComplete: () => {
+        // Overlay covers screen - ready for video/modal
+      },
+    });
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -22,10 +56,11 @@ export function TechStackSection() {
     const playButton = playButtonRef.current;
     if (!section || !line1 || !line2) return;
 
-    // Hide play button initially
+    // Hide play button and overlay initially
     if (playButton) {
       gsap.set(playButton, { opacity: 0, scale: 0.6 });
     }
+    // Overlay init is in separate effect (runs when mounted, overlay is in portal)
 
     const targets = [line1, line2];
     gsap.set(targets, { yPercent: -100 });
@@ -64,12 +99,31 @@ export function TechStackSection() {
     return () => ctx.revert();
   }, []);
 
+  // Init overlay when mounted (portal to body - escapes overflow:hidden of smooth-wrapper)
+  useEffect(() => {
+    if (mounted && overlayRef.current) {
+      gsap.set(overlayRef.current, { scale: 0, left: "50%", top: "50%", xPercent: -50, yPercent: -50 });
+    }
+  }, [mounted]);
+
   return (
-    <section
-      id="section-3"
-      ref={sectionRef}
-      className="relative z-10 flex min-h-screen w-full flex-col items-center px-6 md:px-[120px]"
-    >
+    <>
+      {/* Black overlay - portaled to body to escape overflow:hidden, radiates from play icon */}
+      {mounted &&
+        createPortal(
+          <div
+            ref={overlayRef}
+            aria-hidden="true"
+            className="pointer-events-none fixed left-0 top-0 z-[9999] h-[300vmax] w-[300vmax] rounded-full bg-black"
+          />,
+          document.body
+        )}
+
+      <section
+        id="section-3"
+        ref={sectionRef}
+        className="relative z-10 flex min-h-screen w-full flex-col items-center px-6 md:px-[120px]"
+      >
       <div className="mx-auto flex w-full flex-col items-center gap-16">
         {/* Line 1: Built for | Line 2: scale and reliability */}
         <div className="relative flex flex-1 w-full flex-col items-center justify-center gap-12 text-center py-20">
@@ -99,6 +153,7 @@ export function TechStackSection() {
             ref={playButtonRef}
             type="button"
             aria-label="Play video"
+            onClick={handlePlayClick}
             className="group flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-black bg-black/5 transition-all duration-300 hover:scale-110 hover:bg-black/10 hover:border-black/80 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2"
           >
             <svg
@@ -112,5 +167,6 @@ export function TechStackSection() {
         </div>
       </div>
     </section>
+    </>
   );
 }
