@@ -32,6 +32,7 @@ export function TechStackSection() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const playRetryCleanupRef = useRef<(() => void) | null>(null);
   const earlyCloseFiredRef = useRef(false);
   const phaseRef = useRef<OverlayPhase>("idle");
   const [overlayPhase, setOverlayPhase] = useState<OverlayPhase>("idle");
@@ -67,6 +68,8 @@ export function TechStackSection() {
   }, []);
 
   const resetVideo = useCallback(() => {
+    playRetryCleanupRef.current?.();
+    playRetryCleanupRef.current = null;
     const v = videoRef.current;
     if (!v) return;
     v.pause();
@@ -76,12 +79,30 @@ export function TechStackSection() {
   const tryPlayVideo = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.muted = false;
-    void v.play().catch(() => {
-      v.muted = true;
-      void v.play().catch(() => {
-        /* Autoplay blocked — user can still close with Close or Escape */
+
+    playRetryCleanupRef.current?.();
+    playRetryCleanupRef.current = null;
+
+    const attemptPlay = (): Promise<void> => {
+      v.muted = false;
+      return v.play().catch(() => {
+        v.muted = true;
+        return v.play();
       });
+    };
+
+    void attemptPlay().catch(() => {
+      const onCanPlay = () => {
+        playRetryCleanupRef.current?.();
+        playRetryCleanupRef.current = null;
+        void attemptPlay().catch(() => {
+          /* Still blocked or missing file — user can close with Close or Escape */
+        });
+      };
+      v.addEventListener("canplay", onCanPlay, { once: true });
+      playRetryCleanupRef.current = () => {
+        v.removeEventListener("canplay", onCanPlay);
+      };
     });
   }, []);
 
