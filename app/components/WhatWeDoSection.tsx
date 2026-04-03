@@ -36,21 +36,44 @@ function TypeFadeText({
   startDelay = 0,
   charDelay = 16,
 }: TypeFadeTextProps) {
+  // Split into words so line breaks happen between words only; per-char inline-block
+  // otherwise breaks mid-word (e.g. "digi" / "tal"). Use normal spaces between words.
+  const words = text.split(/(\s+)/);
+  let charIndex = 0;
+
   return (
-    <span aria-label={text} className={`inline whitespace-pre-wrap ${className}`}>
-      {text.split("").map((char, index) => {
-        const visibleState = isVisible
-          ? "translate-y-0 opacity-100 blur-0"
-          : "translate-y-1.5 opacity-0 blur-[2px]";
+    <span aria-label={text} className={`inline ${className}`}>
+      {words.map((segment, segmentIndex) => {
+        if (/^\s+$/.test(segment)) {
+          return (
+            <span key={`space-${segmentIndex}`} className="whitespace-pre">
+              {segment}
+            </span>
+          );
+        }
 
         return (
           <span
-            key={`${char}-${index}`}
-            aria-hidden
-            className={`inline-block transition-all duration-500 ease-out ${visibleState}`}
-            style={{ transitionDelay: `${startDelay + index * charDelay}ms` }}
+            key={`word-${segmentIndex}`}
+            className="inline-block whitespace-nowrap"
           >
-            {char === " " ? "\u00A0" : char}
+            {segment.split("").map((char) => {
+              const index = charIndex++;
+              const visibleState = isVisible
+                ? "translate-y-0 opacity-100 blur-0"
+                : "translate-y-1.5 opacity-0 blur-[2px]";
+
+              return (
+                <span
+                  key={`${char}-${index}`}
+                  aria-hidden
+                  className={`inline-block transition-all duration-500 ease-out ${visibleState}`}
+                  style={{ transitionDelay: `${startDelay + index * charDelay}ms` }}
+                >
+                  {char}
+                </span>
+              );
+            })}
           </span>
         );
       })}

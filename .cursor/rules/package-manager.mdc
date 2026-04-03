@@ -1,0 +1,9 @@
+---
+alwaysApply: true
+---
+
+## Package manager
+
+- Dùng **pnpm** cho mọi thao tác: cài đặt, chạy script, thêm/xóa dependency.
+- Ưu tiên: `pnpm install`, `pnpm run <script>`, `pnpm exec`, `pnpm dlx`.
+- Không dùng `npm` hay `yarn` trừ khi người dùng yêu cầu rõ.
