@@ -225,7 +225,7 @@ export function TechStackSection() {
             />
             <video
               ref={videoRef}
-              className={`fixed top-1/2 left-1/2 z-[5] max-h-[85vh] max-w-[min(90vw,1200px)] -translate-x-1/2 -translate-y-1/2 object-contain transition-opacity duration-300 ${
+              className={`fixed inset-0 z-[5] h-full w-full object-cover transition-opacity duration-300 ${
                 overlayPhase === "open" ? "opacity-100" : "opacity-0"
               } ${overlayPhase === "open" ? "pointer-events-auto" : "pointer-events-none"}`}
               playsInline
