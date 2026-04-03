@@ -18,6 +18,7 @@ const LINE_2 = "and reliability";
 
 const OPEN_DURATION = 1.5;
 const OPEN_EASE = "circ.inOut";
+const VIDEO_SRC = "/assets/video/video.mp4";
 
 type OverlayPhase = "idle" | "opening" | "open" | "closing";
 
@@ -28,6 +29,7 @@ export function TechStackSection() {
   const playButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const phaseRef = useRef<OverlayPhase>("idle");
   const [overlayPhase, setOverlayPhase] = useState<OverlayPhase>("idle");
   const mounted = useSyncExternalStore(
@@ -55,8 +57,28 @@ export function TechStackSection() {
     });
   }, []);
 
+  const resetVideo = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.pause();
+    v.currentTime = 0;
+  }, []);
+
+  const tryPlayVideo = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    void v.play().catch(() => {
+      v.muted = true;
+      void v.play().catch(() => {
+        /* Autoplay blocked — user can still close with Close or Escape */
+      });
+    });
+  }, []);
+
   const handleCloseOverlay = useCallback(() => {
     if (phaseRef.current !== "open") return;
+    resetVideo();
     const overlay = overlayRef.current;
     const button = playButtonRef.current;
     if (!overlay || !button) return;
@@ -83,7 +105,7 @@ export function TechStackSection() {
         playButtonRef.current?.focus();
       },
     });
-  }, []);
+  }, [resetVideo]);
 
   const handlePlayClick = useCallback(() => {
     if (phaseRef.current !== "idle") return;
@@ -91,6 +113,7 @@ export function TechStackSection() {
     const overlay = overlayRef.current;
     if (!button || !overlay) return;
 
+    tryPlayVideo();
     setOverlayPhase("opening");
     gsap.killTweensOf(overlay);
     positionOverlayAtPlayButton();
@@ -105,7 +128,7 @@ export function TechStackSection() {
         closeButtonRef.current?.focus();
       },
     });
-  }, [positionOverlayAtPlayButton]);
+  }, [positionOverlayAtPlayButton, tryPlayVideo]);
 
   useEffect(() => {
     if (overlayPhase !== "open") return;
@@ -199,6 +222,20 @@ export function TechStackSection() {
                   ? "pointer-events-auto"
                   : "pointer-events-none"
               }`}
+            />
+            <video
+              ref={videoRef}
+              className={`fixed top-1/2 left-1/2 z-[5] max-h-[85vh] max-w-[min(90vw,1200px)] -translate-x-1/2 -translate-y-1/2 object-contain transition-opacity duration-300 ${
+                overlayPhase === "open" ? "opacity-100" : "opacity-0"
+              } ${overlayPhase === "open" ? "pointer-events-auto" : "pointer-events-none"}`}
+              playsInline
+              preload="auto"
+              src={VIDEO_SRC}
+              aria-label="Video"
+              onEnded={() => {
+                if (phaseRef.current !== "open") return;
+                handleCloseOverlay();
+              }}
             />
             <button
               ref={closeButtonRef}
