@@ -18,6 +18,8 @@ const LINE_2 = "and reliability";
 
 const OPEN_DURATION = 1.5;
 const OPEN_EASE = "circ.inOut";
+/** Aligns with overlay animation — begin closing this many seconds before the video ends. */
+const EARLY_CLOSE_SECONDS = OPEN_DURATION;
 const VIDEO_SRC = "/assets/video/video.mp4";
 
 type OverlayPhase = "idle" | "opening" | "open" | "closing";
@@ -30,6 +32,7 @@ export function TechStackSection() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const earlyCloseFiredRef = useRef(false);
   const phaseRef = useRef<OverlayPhase>("idle");
   const [overlayPhase, setOverlayPhase] = useState<OverlayPhase>("idle");
   const mounted = useSyncExternalStore(
@@ -40,6 +43,12 @@ export function TechStackSection() {
 
   useEffect(() => {
     phaseRef.current = overlayPhase;
+  }, [overlayPhase]);
+
+  useEffect(() => {
+    if (overlayPhase === "idle") {
+      earlyCloseFiredRef.current = false;
+    }
   }, [overlayPhase]);
 
   const positionOverlayAtPlayButton = useCallback(() => {
@@ -106,6 +115,19 @@ export function TechStackSection() {
       },
     });
   }, [resetVideo]);
+
+  const handleVideoTimeUpdate = useCallback(() => {
+    const v = videoRef.current;
+    if (!v || phaseRef.current !== "open") return;
+    if (earlyCloseFiredRef.current) return;
+    const { duration, currentTime } = v;
+    if (!Number.isFinite(duration) || duration <= 0) return;
+    if (duration < EARLY_CLOSE_SECONDS) return;
+    if (currentTime >= duration - EARLY_CLOSE_SECONDS) {
+      earlyCloseFiredRef.current = true;
+      handleCloseOverlay();
+    }
+  }, [handleCloseOverlay]);
 
   const handlePlayClick = useCallback(() => {
     if (phaseRef.current !== "idle") return;
@@ -232,8 +254,10 @@ export function TechStackSection() {
               preload="auto"
               src={VIDEO_SRC}
               aria-label="Video"
+              onTimeUpdate={handleVideoTimeUpdate}
               onEnded={() => {
                 if (phaseRef.current !== "open") return;
+                earlyCloseFiredRef.current = true;
                 handleCloseOverlay();
               }}
             />
