@@ -194,12 +194,9 @@ export function TechStackSection() {
             <div
               ref={overlayRef}
               aria-hidden="true"
-              onClick={() => {
-                if (phaseRef.current === "open") handleCloseOverlay();
-              }}
               className={`fixed left-0 top-0 z-0 h-[300vmax] w-[300vmax] rounded-full bg-black ${
                 overlayPhase === "open"
-                  ? "cursor-pointer pointer-events-auto"
+                  ? "pointer-events-auto"
                   : "pointer-events-none"
               }`}
             />
@@ -207,10 +204,7 @@ export function TechStackSection() {
               ref={closeButtonRef}
               type="button"
               aria-label="Close"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCloseOverlay();
-              }}
+              onClick={handleCloseOverlay}
               className={`fixed right-6 top-6 z-10 rounded-full border border-white/80 bg-white/10 p-3 text-white backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 ${
                 overlayPhase === "open"
                   ? "pointer-events-auto opacity-100"
