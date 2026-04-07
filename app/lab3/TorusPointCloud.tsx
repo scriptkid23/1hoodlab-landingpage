@@ -70,18 +70,19 @@ export function TorusPointCloud() {
     // Đổi chiều xoay (thêm dấu trừ) và giảm tốc độ (từ 0.3 xuống 0.1)
     pointsRef.current.rotation.z = -t * 0.1;
 
-    // Lắc trái phải nhịp nhàng và lên xuống nhẹ
-    const swayX = Math.sin(t * 1.5) * 0.5;
-    const swayY = Math.cos(t * 0.8) * 0.15;
+    // Lắc trái phải và lên xuống rộng hơn nhưng mượt mà hơn
+    const swayX = Math.sin(t * 0.8) * 1.5; // Biên độ 1.5 (an toàn trong ống bán kính 3.5)
+    const swayY = Math.cos(t * 0.5) * 0.8;
 
     state.camera.position.x = swayX;
     state.camera.position.y = swayY;
     
-    // Nhìn thẳng về phía trước, hơi hướng theo nhịp lắc
-    state.camera.lookAt(swayX * 0.2, swayY * 0.2, -5);
+    // Nhìn sâu vào trong hole (Z = -15), điểm nhìn cũng hơi lệch theo nhịp lắc để tạo cảm giác liếc nhìn
+    state.camera.lookAt(swayX * 0.3, swayY * 0.3, -15);
     
-    // Thêm độ nghiêng (roll) cho camera khi lắc trái phải
-    state.camera.rotation.z = -Math.sin(t * 1.5) * 0.1;
+    // Xoay nghiêng camera (roll) theo nhịp lắc trái phải để tạo cảm giác lượn (banking)
+    // Dùng cos (đạo hàm của sin) để nghiêng mạnh nhất khi đang bẻ lái
+    state.camera.rotation.z = -Math.cos(t * 0.8) * 0.25;
   });
 
   return (
