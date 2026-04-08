@@ -22,7 +22,7 @@ export function HeroAnimation({
   const isDark = theme === "dark";
   const isCenter = align === "center";
   const wrapClassName = accountForHeader
-    ? "relative isolate flex min-h-[calc(100svh-var(--header-height))] flex-col items-center justify-center overflow-hidden pt-(--header-height)"
+    ? "relative isolate box-border flex h-[100dvh] flex-col items-center justify-center overflow-hidden pt-(--header-height)"
     : "relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden";
 
   // Fallback: run animation anyway after 6s if pageReady never fires
@@ -140,48 +140,30 @@ export function HeroAnimation({
       className={wrapClassName}
     >
       <section
-        className={`relative z-20 w-full px-6 md:px-[120px] ${isCenter ? "text-center" : ""}`}
+        className={`relative z-20 w-full md:px-[40px] ${isCenter ? "text-center" : ""}`}
       >
-        <p
-          ref={techRef}
-          className={`mb-1 text-2xl leading-8 font-normal ${isDark ? "text-[#e7e7e7]" : "text-rangitoto-950"}`}
-        >
-          Technology
-        </p>
-
         <h1
           ref={line1Ref}
           className={`overflow-hidden font-heading text-[40px] leading-tight font-normal md:text-[64px] md:leading-[79px] ${isCenter ? "mx-auto text-center" : ""} ${isDark ? "text-[#e7e7e7]" : "text-rangitoto-950"}`}
         >
-          The fastest, most reliable way
+          The fastest,
+        
+          most reliable   <br />way
         </h1>
       </section>
 
-      <div
-        ref={lineRef}
-        className="relative left-1/2 z-20 w-screen -translate-x-1/2"
-      >
-        <div className={`h-px w-full ${isDark ? "bg-[#e7e7e7]/20" : "bg-rangitoto-950/10"}`} />
-        <div
-          className={`pointer-events-none absolute inset-y-0 left-0 w-28 bg-linear-to-r to-transparent md:w-64 ${isDark ? "from-[#111]" : "from-moon-mist-100"}`}
-        />
-        <div
-          className={`pointer-events-none absolute inset-y-0 right-0 w-28 bg-linear-to-l to-transparent md:w-64 ${isDark ? "from-[#111]" : "from-moon-mist-100"}`}
-        />
-      </div>
-
+    
       <section
-        className={`relative z-20 flex w-full overflow-hidden px-6 pt-4 md:px-[120px] md:pt-0 ${isCenter ? "justify-center" : "justify-end"}`}
+        className={`relative z-20 -translate-y-[60px] flex w-full overflow-hidden px-6 pt-4 md:px-[40px] md:pt-0 ${isCenter ? "justify-center" : "justify-end"}`}
       >
         <h2
           ref={line2Ref}
           className={`font-heading text-[40px] leading-tight font-normal md:text-[64px] md:leading-[79px] ${isCenter ? "text-center" : "whitespace-nowrap text-right"} ${isDark ? "text-[#e7e7e7]" : "text-rangitoto-950"}`}
         >
           to go from{" "}
-          <span className={`font-bold font-satoshi ${isDark ? "text-white" : "text-black"}`}>idea</span>{" "}
-          to{" "}
+          <span className={`font-bold font-satoshi ${isDark ? "text-white" : "text-black"}`}>idea </span>{" "}to<br />
           <span className={`font-bold font-satoshi ${isDark ? "text-white" : "text-black"}`}>
-            production
+            production deployment
           </span>
         </h2>
       </section>

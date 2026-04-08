@@ -18,9 +18,10 @@ import { BlendFunction } from "postprocessing";
 type GlassRibbonProps = {
   reveal: boolean;
   scrollProgress: number;
+  tone: "light" | "dark";
 };
 
-function GlassRibbon({ reveal, scrollProgress }: GlassRibbonProps) {
+function GlassRibbon({ reveal, scrollProgress, tone }: GlassRibbonProps) {
   const { scene } = useGLTF("/assets/models/model.glb");
   const { setModelLoaded } = useHeroScene();
   const ribbonRef = useRef<THREE.Group>(null);
@@ -29,10 +30,22 @@ function GlassRibbon({ reveal, scrollProgress }: GlassRibbonProps) {
   const chromaOffset = useMemo(() => new THREE.Vector2(0.00028, 0.00014), []);
   const revealProgressRef = useRef(0);
   const scrollProgressRef = useRef(0);
-  const startGlassColor = useMemo(() => new THREE.Color("#ffffff"), []);
-  const endGlassColor = useMemo(() => new THREE.Color("#05060f"), []);
-  const startAttenuationColor = useMemo(() => new THREE.Color("#f3f6ff"), []);
-  const endAttenuationColor = useMemo(() => new THREE.Color("#1b1630"), []);
+  const startGlassColor = useMemo(
+    () => new THREE.Color(tone === "dark" ? "#171717" : "#ffffff"),
+    [tone]
+  );
+  const endGlassColor = useMemo(
+    () => new THREE.Color(tone === "dark" ? "#060606" : "#05060f"),
+    [tone]
+  );
+  const startAttenuationColor = useMemo(
+    () => new THREE.Color(tone === "dark" ? "#1f1f1f" : "#f3f6ff"),
+    [tone]
+  );
+  const endAttenuationColor = useMemo(
+    () => new THREE.Color(tone === "dark" ? "#090909" : "#1b1630"),
+    [tone]
+  );
   const glassColor = useMemo(
     () => `#${startGlassColor.clone().lerp(endGlassColor, scrollProgress).getHexString()}`,
     [startGlassColor, endGlassColor, scrollProgress]
@@ -193,9 +206,14 @@ function GlassRibbon({ reveal, scrollProgress }: GlassRibbonProps) {
 type HeroGlassSceneProps = {
   reveal?: boolean;
   scrollProgress?: number;
+  tone?: "light" | "dark";
 };
 
-export function HeroGlassScene({ reveal = true, scrollProgress = 0 }: HeroGlassSceneProps) {
+export function HeroGlassScene({
+  reveal = true,
+  scrollProgress = 0,
+  tone = "light",
+}: HeroGlassSceneProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -227,24 +245,28 @@ export function HeroGlassScene({ reveal = true, scrollProgress = 0 }: HeroGlassS
         canvas.addEventListener("webglcontextrestored", () => {}, false);
       }}
     >
-      <ambientLight intensity={0.1} />
+      <ambientLight intensity={tone === "dark" ? 0.07 : 0.1} />
       <directionalLight
         position={[0.25, 3.8, 2.6]}
-        intensity={1.1}
+        intensity={tone === "dark" ? 0.75 : 1.1}
         color="#ffffff"
       />
       <directionalLight
         position={[-2.8, 1.4, -3.6]}
-        intensity={0.72}
+        intensity={tone === "dark" ? 0.48 : 0.72}
         color="#d8e0ff"
       />
-      <pointLight position={[2.4, 0.6, 1.7]} intensity={0.16} color="#f8faff" />
+      <pointLight
+        position={[2.4, 0.6, 1.7]}
+        intensity={tone === "dark" ? 0.1 : 0.16}
+        color="#f8faff"
+      />
 
       <Environment preset="studio" blur={0.82} />
 
       <Suspense fallback={null}>
         <group position={[0, 0, 0]}>
-          <GlassRibbon reveal={reveal} scrollProgress={scrollProgress} />
+          <GlassRibbon reveal={reveal} scrollProgress={scrollProgress} tone={tone} />
         </group>
       </Suspense>
     </Canvas>
