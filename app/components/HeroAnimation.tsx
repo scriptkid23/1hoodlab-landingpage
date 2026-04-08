@@ -6,9 +6,24 @@ import { useHeroScene } from "./HeroSceneContext";
 
 const FALLBACK_READY_MS = 6000;
 
-export function HeroAnimation() {
+type HeroAnimationProps = {
+  theme?: "light" | "dark";
+  align?: "split" | "center";
+  accountForHeader?: boolean;
+};
+
+export function HeroAnimation({
+  theme = "light",
+  align = "split",
+  accountForHeader = false,
+}: HeroAnimationProps) {
   const { pageReady, setModelVisible, setScrollProgress, setSection4Progress } = useHeroScene();
   const [fallbackReady, setFallbackReady] = useState(false);
+  const isDark = theme === "dark";
+  const isCenter = align === "center";
+  const wrapClassName = accountForHeader
+    ? "relative isolate flex min-h-[calc(100svh-var(--header-height))] flex-col items-center justify-center overflow-hidden pt-(--header-height)"
+    : "relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden";
 
   // Fallback: run animation anyway after 6s if pageReady never fires
   useEffect(() => {
@@ -122,19 +137,21 @@ export function HeroAnimation() {
   return (
     <div
       ref={wrapRef}
-      className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden"
+      className={wrapClassName}
     >
-      <section className="relative z-20 w-full px-6 md:px-[120px]">
+      <section
+        className={`relative z-20 w-full px-6 md:px-[120px] ${isCenter ? "text-center" : ""}`}
+      >
         <p
           ref={techRef}
-          className="mb-1 text-2xl leading-8 font-normal text-rangitoto-950"
+          className={`mb-1 text-2xl leading-8 font-normal ${isDark ? "text-[#e7e7e7]" : "text-rangitoto-950"}`}
         >
           Technology
         </p>
 
         <h1
           ref={line1Ref}
-          className="overflow-hidden font-heading text-[40px] leading-tight font-normal text-rangitoto-950 md:text-[64px] md:leading-[79px]"
+          className={`overflow-hidden font-heading text-[40px] leading-tight font-normal md:text-[64px] md:leading-[79px] ${isCenter ? "mx-auto text-center" : ""} ${isDark ? "text-[#e7e7e7]" : "text-rangitoto-950"}`}
         >
           The fastest, most reliable way
         </h1>
@@ -144,18 +161,28 @@ export function HeroAnimation() {
         ref={lineRef}
         className="relative left-1/2 z-20 w-screen -translate-x-1/2"
       >
-        <div className="h-px w-full bg-rangitoto-950/10" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-28 bg-linear-to-r from-moon-mist-100 to-transparent md:w-64" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-linear-to-l from-moon-mist-100 to-transparent md:w-64" />
+        <div className={`h-px w-full ${isDark ? "bg-[#e7e7e7]/20" : "bg-rangitoto-950/10"}`} />
+        <div
+          className={`pointer-events-none absolute inset-y-0 left-0 w-28 bg-linear-to-r to-transparent md:w-64 ${isDark ? "from-[#111]" : "from-moon-mist-100"}`}
+        />
+        <div
+          className={`pointer-events-none absolute inset-y-0 right-0 w-28 bg-linear-to-l to-transparent md:w-64 ${isDark ? "from-[#111]" : "from-moon-mist-100"}`}
+        />
       </div>
 
-      <section className="relative z-20 flex w-full justify-end overflow-hidden px-6 pt-4 md:px-[120px] md:pt-0">
+      <section
+        className={`relative z-20 flex w-full overflow-hidden px-6 pt-4 md:px-[120px] md:pt-0 ${isCenter ? "justify-center" : "justify-end"}`}
+      >
         <h2
           ref={line2Ref}
-          className="whitespace-nowrap text-right font-heading text-[40px] leading-tight font-normal text-rangitoto-950 md:text-[64px] md:leading-[79px]"
+          className={`font-heading text-[40px] leading-tight font-normal md:text-[64px] md:leading-[79px] ${isCenter ? "text-center" : "whitespace-nowrap text-right"} ${isDark ? "text-[#e7e7e7]" : "text-rangitoto-950"}`}
         >
-          to go from <span className="font-bold text-black font-satoshi">idea</span> to{" "}
-          <span className="font-bold text-black font-satoshi">production</span>
+          to go from{" "}
+          <span className={`font-bold font-satoshi ${isDark ? "text-white" : "text-black"}`}>idea</span>{" "}
+          to{" "}
+          <span className={`font-bold font-satoshi ${isDark ? "text-white" : "text-black"}`}>
+            production
+          </span>
         </h2>
       </section>
     </div>
