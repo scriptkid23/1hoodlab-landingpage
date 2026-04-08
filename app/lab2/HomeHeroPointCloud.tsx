@@ -123,7 +123,10 @@ function createTubePoints(scene: THREE.Scene): TubePointsApi {
     CONFIG.tube.radialSegments,
     false
   );
-  geometry.attributes.position.setUsage(THREE.DynamicDrawUsage);
+  const positionAttr = geometry.attributes.position;
+  if (positionAttr instanceof THREE.BufferAttribute) {
+    positionAttr.setUsage(THREE.DynamicDrawUsage);
+  }
 
   const material = new THREE.ShaderMaterial({
     uniforms: THREE.UniformsUtils.merge([
@@ -197,7 +200,7 @@ function createAnimator(params: {
     mouseSmoothed = new Float32Array(original.length);
   }
 
-  let waveIntensity = CONFIG.wave.introStartIntensity;
+  let waveIntensity: number = CONFIG.wave.introStartIntensity;
   let spatialBlend = 0;
   let introComplete = false;
   let introStartMs: number | null = null;

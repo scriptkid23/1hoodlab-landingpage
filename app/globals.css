@@ -154,3 +154,18 @@ body::-webkit-scrollbar {
     transform: scale(1);
   }
 }
+
+/* Reference: portfolio CTA / arrow nav (main.min.css parity) */
+.button--dot {
+  flex-shrink: 0;
+}
+
+.button.-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}

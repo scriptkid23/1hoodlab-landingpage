@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 const NAV_LINKS = [
-  { label: "WHY WQF", href: "#why-wqf" },
   { label: "PORTFOLIO", href: "#portfolio" },
   { label: "TEAM", href: "#team" },
   { label: "INSIGHTS", href: "#insights" },
