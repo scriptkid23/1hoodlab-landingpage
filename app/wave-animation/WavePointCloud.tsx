@@ -14,6 +14,7 @@ uniform float uAttenuation;
 uniform float uFogNear;
 uniform float uFogFar;
 varying float vFade;
+varying float vHeight;
 
 void main() {
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
@@ -23,6 +24,7 @@ void main() {
 
   float depth = -mvPosition.z;
   vFade = 1.0 - smoothstep(uFogNear, uFogFar, depth);
+  vHeight = position.z;
 }
 `;
 
@@ -30,11 +32,20 @@ const fragmentShader = `
 uniform vec3 uColor;
 uniform vec3 uBgColor;
 varying float vFade;
+varying float vHeight;
 
 void main() {
   vec2 center = gl_PointCoord - vec2(0.5);
-  if (dot(center, center) > 0.25) discard;
-  vec3 col = mix(uBgColor, uColor, vFade);
+  float r2 = dot(center, center);
+  if (r2 > 0.25) discard;
+
+  // Soft edge antialiasing
+  float edge = smoothstep(0.25, 0.18, r2);
+
+  // Height boost — peaks slightly brighter
+  float heightBoost = clamp(0.85 + vHeight * 0.06, 0.7, 1.0);
+
+  vec3 col = mix(uBgColor, uColor * heightBoost, vFade * edge);
   gl_FragColor = vec4(col, 1.0);
 }
 `;
@@ -199,7 +210,7 @@ export function WavePointCloud() {
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
         uniforms={uniforms}
-        transparent={false}
+        transparent
         depthWrite
         depthTest
       />
