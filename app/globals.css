@@ -4,6 +4,14 @@
   color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
+  --header-height: 4rem;
+  --easing: cubic-bezier(0.62, 0.16, 0.13, 1.01);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-height: 5rem;
+  }
 }
 
 @theme inline {
@@ -90,6 +98,50 @@ body::-webkit-scrollbar {
 #smooth-wrapper::-webkit-scrollbar,
 #smooth-content::-webkit-scrollbar {
   display: none;
+}
+
+/* Corner accent positioning */
+.corner-accent {
+  position: absolute;
+}
+.corner-accent:first-of-type {
+  left: var(--inset, 0);
+  top: var(--inset, 0);
+}
+.corner-accent:nth-of-type(2) {
+  right: var(--inset, 0);
+  top: var(--inset, 0);
+  transform: rotate(90deg);
+}
+.corner-accent:nth-of-type(3) {
+  bottom: var(--inset, 0);
+  left: var(--inset, 0);
+  transform: rotate(270deg);
+}
+.corner-accent:nth-of-type(4) {
+  bottom: var(--inset, 0);
+  right: var(--inset, 0);
+  transform: rotate(180deg);
+}
+
+/* Glitch hover animation */
+@keyframes glitch-hover {
+  0% { opacity: 1; }
+  20% { opacity: 0.4; }
+  40% { opacity: 1; }
+  60% { opacity: 0.6; }
+  80% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes clipReveal {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
 }
 
 @keyframes loadingDot {
