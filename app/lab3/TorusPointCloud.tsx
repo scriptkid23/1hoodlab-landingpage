@@ -51,7 +51,7 @@ export function TorusPointCloud() {
 
   const uniforms = useMemo(
     () => ({
-      uSize: { value: 0.28 },
+      uSize: { value: 0.2 },
       uAttenuation: { value: 160 },
       uColor: { value: new THREE.Color("#d1d1d1") },
     }),
