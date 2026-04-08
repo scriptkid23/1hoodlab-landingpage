@@ -85,7 +85,7 @@ const CONFIG = {
   // Wave — exact reference values
   baseAmplitude: 1,
   baseFrequency: 0.15,
-  octaves: 3,
+  octaves: 2,
   frequencySpeed: 0.35,
   amplitudeVariation: 0.35,
   animationSpeed: 0.6,
@@ -94,13 +94,13 @@ const CONFIG = {
 
   // Particles — exact reference values
   pointSize: 0.25,
-  sizeAttenuation: 170,
+  sizeAttenuation: 250,
   color: "#d1d1d1",
 
   // Fog — exact reference values
   fogColor: "#111111",
   fogNear: 5,
-  fogFar: 70,
+  fogFar: 50,
 };
 
 /* ------------------------------------------------------------------ */
