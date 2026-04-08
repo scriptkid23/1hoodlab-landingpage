@@ -1,10 +1,21 @@
 "use client";
 
+import { Canvas } from "@react-three/fiber";
 import { useEffect } from "react";
-import { FixedModelLayer } from "../components/FixedModelLayer";
 import { LabHeader } from "../components/LabHeader";
 import { HeroAnimation } from "../components/HeroAnimation";
 import { HeroSceneProvider, useHeroScene } from "../components/HeroSceneContext";
+import { MorphPointCloud } from "../lab5/MorphPointCloud";
+
+function V2MorphLayer() {
+  return (
+    <div className="pointer-events-none absolute inset-0 z-10">
+      <Canvas camera={{ position: [0, 0, 20], fov: 50 }} gl={{ antialias: true }}>
+        <MorphPointCloud />
+      </Canvas>
+    </div>
+  );
+}
 
 function V2HeroSection() {
   const { setPageReady } = useHeroScene();
@@ -15,7 +26,7 @@ function V2HeroSection() {
 
   return (
     <div className="relative z-20">
-      <FixedModelLayer tone="dark" scrollProgressOverride={0} position="absolute" />
+      <V2MorphLayer />
       <HeroAnimation theme="dark" align="split" accountForHeader />
     </div>
   );
